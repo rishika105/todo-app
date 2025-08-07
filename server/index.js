@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const database = require("./config/database");
 const userRoutes = require("./routes/userRoutes");
+const todoRoutes = require("./routes/todoRoutes")
 const passport = require("passport");
 require("./middlewares/passport");
 
@@ -19,6 +20,7 @@ app.use(passport.initialize());
 
 //routes
 app.use("/auth", userRoutes);
+app.use("", todoRoutes);
 
 // Define a basic route
 app.get("/", (req, res) => {
