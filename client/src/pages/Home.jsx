@@ -13,8 +13,12 @@ import {
   Zap,
   Users,
 } from "lucide-react";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+  //  If a user tries to access / while logged in, redirect them to /my-todos.
+  //  Use replace so it doesn't add to history stack (prevents back navigation to this page).
+
   const handleGoogleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
   };

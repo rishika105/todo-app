@@ -5,6 +5,7 @@ import Todo from "./pages/Todo";
 import PrivateRoute from "./guards/PrivateRoute";
 import OpenRoute from "./guards/OpenRoute";
 import AuthSuccess from "./pages/AuthSuccess";
+import Error from "./components/Error";
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        <Route path="*" element={<Error />} />
       </Routes>
     </div>
   );
