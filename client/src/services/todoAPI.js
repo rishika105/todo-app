@@ -3,12 +3,17 @@ import { apiConnector } from "./apiConnector";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-export const createTodo = async (data, token) => {
+export const createTodo = async (title, description , token) => {
   const toastId = toast.loading("Creating task...");
   try {
-    const response = await apiConnector("POST", `${BASE_URL}/createTodo`, data, {
-      Authorization: `Bearer ${token}`,
-    });
+    const response = await apiConnector(
+      "POST",
+      `${BASE_URL}/createTodo`,
+      {title, description},
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
 
     if (!response.data.success) {
       throw new Error("Failed to create task");
@@ -20,36 +25,41 @@ export const createTodo = async (data, token) => {
     console.error("Error creating task:", error);
     toast.error("Error creating task");
   }
-  toast.dismiss(toastId);
+  finally {
+    toast.dismiss(toastId); // ✅ always runs
+  }
 };
 
-
 export const fetchTodos = async (token) => {
-     const toastId = toast.loading("Loading...");
   try {
-    const response = await apiConnector("GET", `${BASE_URL}/getTodos`);
+    const response = await apiConnector("GET", `${BASE_URL}/getTodos`, null, {
+      Authorization: `Bearer ${token}`,
+    });
 
     if (!response.data.success) {
-      throw new Error("Failed to fetch categories");
+      throw new Error("Failed to fetch tasks");
     }
-    
-    console.log("Fetched todos", response.data);
+
+  //  console.log("Fetched todos", response.data);
 
     return response.data;
   } catch (error) {
     console.error("Error fetching categories:", error);
-    toast.error("Error fetching tasks")
-  }
-    toast.dismiss(toastId);
-  
+    toast.error("Error fetching tasks");
+  } 
 };
 
-export const updateTodo = async (id, updatedData, token) => {
+export const updateTodo = async (id, title, description, token) => {
   const toastId = toast.loading("Updating task...");
   try {
-    const response = await apiConnector("PUT", `${BASE_URL}/updateTodo/${id}`, updatedData, {
-      Authorization: `Bearer ${token}`,
-    });
+    const response = await apiConnector(
+      "PUT",
+      `${BASE_URL}/updateTodo/${id}`,
+      {title, description},
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
 
     if (!response.data.success) {
       throw new Error("Failed to update task");
@@ -60,16 +70,22 @@ export const updateTodo = async (id, updatedData, token) => {
   } catch (error) {
     console.error("Error updating task:", error);
     toast.error("Error updating task");
+  } finally {
+    toast.dismiss(toastId); // ✅ always runs
   }
-  toast.dismiss(toastId);
 };
 
 export const deleteTodo = async (id, token) => {
   const toastId = toast.loading("Deleting task...");
   try {
-    const response = await apiConnector("DELETE", `${BASE_URL}/deleteTodo/${id}`, null, {
-      Authorization: `Bearer ${token}`,
-    });
+    const response = await apiConnector(
+      "DELETE",
+      `${BASE_URL}/deleteTodo/${id}`,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
 
     if (!response.data.success) {
       throw new Error("Failed to delete task");
@@ -80,27 +96,30 @@ export const deleteTodo = async (id, token) => {
   } catch (error) {
     console.error("Error deleting task:", error);
     toast.error("Error deleting task");
+  } finally {
+    toast.dismiss(toastId); // ✅ always runs
   }
-  toast.dismiss(toastId);
 };
 
 export const toggleCompleteTodo = async (id, token) => {
-  const toastId = toast.loading("Toggling task status...");
   try {
-    const response = await apiConnector("PATCH", `${BASE_URL}/toggleTodo/${id}`, null, {
-      Authorization: `Bearer ${token}`,
-    });
+    const response = await apiConnector(
+      "PATCH",
+      `${BASE_URL}/toggle/${id}`,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
 
     if (!response.data.success) {
       throw new Error("Failed to toggle task");
     }
 
-    toast.success("Task status updated");
+    //toast.success("Task status updated");
     return response.data;
   } catch (error) {
     console.error("Error toggling task:", error);
     toast.error("Error toggling task");
-  }
-  toast.dismiss(toastId);
+  } 
 };
-
